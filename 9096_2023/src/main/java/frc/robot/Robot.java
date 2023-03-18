@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   DigitalOutput dout = new DigitalOutput(0);
   float pow;
   float aPow;
-  float autoDist = 2.45f;
+  float autoDist = 2.6f;
   int autoState = 0;
   private RobotContainer m_robotContainer;
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -89,16 +89,22 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
     SmartDashboard.putNumber("Auto Time", Timer.getFPGATimestamp() - timestamp);
     SmartDashboard.putData(drive);
-    if (pose[2] < autoDist & v > 0 & autoState == 0) {
-      drive.arcadeDrive(0.5, Math.tanh(pose[4]) / 2);
-    } else {
+    if (pose[2] < autoDist & v > 0) {
+      drive.arcadeDrive(0,  0.0);     
+      //drive.arcadeDrive(0.5, Math.tanh(pose[4]) / 2);
+    }
+    else {
       drive.arcadeDrive(0,  0.0);
     }
 
-    if ((timestamp - Timer.getFPGATimestamp()) < 10 & arm.getOutputCurrent() < 30) {
+    if ((timestamp - Timer.getFPGATimestamp()) < 8.0f & arm.getOutputCurrent() < 30) {
       arm.set(0.2);
+    } else if ((timestamp - Timer.getFPGATimestamp()) < 9.0f  & claw.getOutputCurrent() < 30) {
+      claw.set(-0.2);
+      arm.set(0);
     } else {
       arm.set(0);
+      claw.set(0);
     }
   }
 
@@ -113,18 +119,18 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    arm.set(armCtrl.getY() * 0.2);
+    arm.set(armCtrl.getY() * 0.3);
     dout.set(armCtrl.getTrigger());
-    pow = (ctrl.getTrigger() ? 0.6f : 0.5f);
-    drive.arcadeDrive(ctrl.getX() * pow, ctrl.getY() * pow);
+    pow = (ctrl.getTrigger() ? 0.9f : 0.6f);
+    drive.arcadeDrive(ctrl.getX() * pow, ctrl.getY() * 0.75);
 
-    if (claw.getOutputCurrent() < 30 & armCtrl.getRawAxis(5) > 0) {
+   // if (claw.getOutputCurrent() < 30 & armCtrl.getRawAxis(5) < 0) {
       claw.set(armCtrl.getRawAxis(5) * 0.2);
-    } else if (armCtrl.getRawAxis(5) < 0) {
-      claw.set(armCtrl.getRawAxis(5) * 0.2);
-    } else {
-      claw.set(0);
-    }
+   // } else if (armCtrl.getRawAxis(5) < 0) {
+    //  claw.set(armCtrl.getRawAxis(5) * 0.2);
+    //} else {
+    //  claw.set(0);
+    //}
 
     SmartDashboard.putNumber("Claw current", claw.getOutputCurrent());
   }
