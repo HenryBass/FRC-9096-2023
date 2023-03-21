@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.Joystick;
 
 import org.opencv.features2d.FastFeatureDetector;
@@ -37,9 +39,12 @@ public class Robot extends TimedRobot {
   MotorControllerGroup right = new MotorControllerGroup(victorFR, victorBR);
   DifferentialDrive drive = new DifferentialDrive(left, right);
   DigitalOutput dout = new DigitalOutput(0);
+  RelativeEncoder clawEncoder = claw.getAlternateEncoder(42);
   float pow;
+  float clawPow;
   float aPow;
   float autoDist = 2.6f;
+  double autoTime = 0;
   int autoState = 0;
   private RobotContainer m_robotContainer;
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -81,13 +86,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
    
+    autoTime = (Timer.getFPGATimestamp() - timestamp);
     double v = tv.getDouble(0.0);
     double[] pose = botpose.getDoubleArray(new double[6]);
 
     SmartDashboard.putNumber("Apriltag distance", pose[2]);
     SmartDashboard.putNumber("Apriltag angle", pose[4]);
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
-    SmartDashboard.putNumber("Auto Time", Timer.getFPGATimestamp() - timestamp);
+    SmartDashboard.putNumber("Auto Time", autoTime);
     SmartDashboard.putData(drive);
     if (pose[2] < autoDist & v > 0) {
       drive.arcadeDrive(0,  0.0);     
@@ -97,9 +103,9 @@ public class Robot extends TimedRobot {
       drive.arcadeDrive(0,  0.0);
     }
 
-    if ((timestamp - Timer.getFPGATimestamp()) < 8.0f & arm.getOutputCurrent() < 30) {
+    if (autoTime < 7.0f) {
       arm.set(0.2);
-    } else if ((timestamp - Timer.getFPGATimestamp()) < 9.0f  & claw.getOutputCurrent() < 30) {
+    } else if (autoTime > 8.0f && autoTime < 9.5f) {
       claw.set(-0.2);
       arm.set(0);
     } else {
@@ -119,13 +125,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    arm.set(armCtrl.getY() * 0.3);
+    arm.set((armCtrl.getY() * Math.sqrt(Math.abs(armCtrl.getY()))) * 0.4);
     dout.set(armCtrl.getTrigger());
     pow = (ctrl.getTrigger() ? 0.9f : 0.6f);
-    drive.arcadeDrive(ctrl.getX() * pow, ctrl.getY() * 0.75);
+    clawPow = (ctrl.getTrigger() ? 0.75f : 0.63f);
+    drive.arcadeDrive(ctrl.getX() * pow, ctrl.getY() * clawPow);
 
    // if (claw.getOutputCurrent() < 30 & armCtrl.getRawAxis(5) < 0) {
-      claw.set(armCtrl.getRawAxis(5) * 0.2);
+      claw.set(armCtrl.getRawAxis(5) * 0.4);
    // } else if (armCtrl.getRawAxis(5) < 0) {
     //  claw.set(armCtrl.getRawAxis(5) * 0.2);
     //} else {
@@ -133,6 +140,7 @@ public class Robot extends TimedRobot {
     //}
 
     SmartDashboard.putNumber("Claw current", claw.getOutputCurrent());
+    SmartDashboard.putNumber("Claw rotations", claw.getOutputCurrent());
   }
 
   @Override
