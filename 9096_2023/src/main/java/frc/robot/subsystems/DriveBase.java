@@ -40,7 +40,7 @@ public class DriveBase extends SubsystemBase {
     return arm.getOutputCurrent();
   }
 
-  public void setSpeed(double speed, double rotation) {
+  public void drive(double speed, double rotation) {
     drive.arcadeDrive(speed, rotation);
   }
 
@@ -50,6 +50,11 @@ public class DriveBase extends SubsystemBase {
 
   public void setClaw(double speed) {
     claw.set(speed);
+  }
+
+  public void halt() {
+    claw.set(0.0);
+    arm.set(0.0);
   }
 
 }

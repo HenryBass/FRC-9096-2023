@@ -3,19 +3,26 @@ package frc.robot.commands;
 import frc.robot.subsystems.DriveBase;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 
-public class MoveArm extends CommandBase {
+public class DriveBack extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveBase driveSystem;
   private final Limelight limelightSystem;
-
+  Joystick armCtrl = new Joystick(1);
+  Joystick ctrl = new Joystick(0);
+  double pow;
+  double clawPow;
+  float aPow;
   float autoDist = 2.6f;
   double autoTime = 0;
+  int autoState = 0;
   double timestamp = 0;
   
-  public MoveArm(DriveBase drivesystem, Limelight limelightsystem) {
+  public DriveBack(DriveBase drivesystem, Limelight limelightsystem) {
     driveSystem = drivesystem;
     limelightSystem = limelightsystem;
     addRequirements(drivesystem, limelightsystem);
@@ -32,13 +39,13 @@ public class MoveArm extends CommandBase {
 
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
     SmartDashboard.putNumber("Auto Time", autoTime);
-
-    if (autoTime < 7.0f) {
-      driveSystem.setArm(0.2);
-    } else if (autoTime > 8.0f) {
-      //driveSystem.setClaw(-0.2);
-      driveSystem.setArm(0.0);
+    if (limelightSystem.getDist() < autoDist) {
+      driveSystem.drive(0.5, Math.tanh(limelightSystem.getAngle()) / 2);
     }
+    else {
+      driveSystem.halt();
+    }
+
   }
 
   @Override
@@ -48,6 +55,6 @@ public class MoveArm extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return autoTime < 9.0f;
+    return false;
   }
 }
