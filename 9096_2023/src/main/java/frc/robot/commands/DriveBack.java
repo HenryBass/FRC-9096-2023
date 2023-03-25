@@ -31,6 +31,7 @@ public class DriveBack extends CommandBase {
   @Override
   public void initialize() {
     limelightSystem.setPipeline(0);
+    driveSystem.halt();
   }
 
   @Override
@@ -39,10 +40,10 @@ public class DriveBack extends CommandBase {
 
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
     SmartDashboard.putNumber("Auto Time", autoTime);
-    if (limelightSystem.getDist() < autoDist) {
+    
+    if (limelightSystem.getDist() < autoDist && limelightSystem.getVisible() > 0.0) {
       driveSystem.drive(0.5, Math.tanh(limelightSystem.getAngle()) / 2);
-    }
-    else {
+    } else {
       driveSystem.halt();
     }
 

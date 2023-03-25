@@ -23,6 +23,11 @@ public class DriveBase extends SubsystemBase {
   MotorControllerGroup right = new MotorControllerGroup(victorFR, victorBR);
   DifferentialDrive drive = new DifferentialDrive(left, right);
 
+  double driveSpeed = 0.0;
+  double driveAngle = 0.0;
+  double armSpeed = 0.0;
+  double clawSpeed = 0.0;
+
   public DriveBase() {
     left.setInverted(false);
   }
@@ -30,6 +35,10 @@ public class DriveBase extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Claw current", claw.getOutputCurrent());
+    drive.arcadeDrive(driveSpeed, driveAngle);
+    
+    arm.set(armSpeed);
+    claw.set(clawSpeed);
   }
 
   public double getClawCurrent() {
@@ -41,20 +50,22 @@ public class DriveBase extends SubsystemBase {
   }
 
   public void drive(double speed, double rotation) {
-    drive.arcadeDrive(speed, rotation);
+    driveSpeed = speed;
+    driveAngle = rotation;
   }
 
   public void setArm(double speed) {
-    arm.set(speed);
+    armSpeed = speed;
   }
 
   public void setClaw(double speed) {
-    claw.set(speed);
+    clawSpeed = speed;
   }
 
   public void halt() {
-    claw.set(0.0);
-    arm.set(0.0);
+    setClaw(0.0);
+    setArm(0.0);
+    drive(0.0, 0.0);
   }
 
 }

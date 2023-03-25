@@ -42,6 +42,10 @@ public class Limelight extends SubsystemBase {
     return pose[2];
   }
 
+  public double getVisible() {
+    return v;
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Apriltag distance", pose[2]);

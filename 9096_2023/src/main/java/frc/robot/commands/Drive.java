@@ -23,13 +23,14 @@ public class Drive extends CommandBase {
   @Override
   public void initialize() {
     limelightSystem.setPipeline(1);
+    driveSystem.halt();
   }
 
   @Override
   public void execute() {
     pow = (ctrl.getTrigger() ? 0.9f : 0.6f);
     clawPow = (ctrl.getTrigger() ? 0.75f : 0.63f);
-    driveSystem.setArm(armCtrl.getRawAxis(5) * 0.4);
+    driveSystem.setArm(armCtrl.getRawAxis(5) * -0.4);
     driveSystem.drive(ctrl.getX() * pow, ctrl.getY() * pow);
   
   }

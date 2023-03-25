@@ -13,7 +13,7 @@ public class MoveArm extends CommandBase {
 
   float autoDist = 2.6f;
   double autoTime = 0;
-  double timestamp = 0;
+  double timestamp = Timer.getFPGATimestamp();
   
   public MoveArm(DriveBase drivesystem, Limelight limelightsystem) {
     driveSystem = drivesystem;
@@ -24,6 +24,7 @@ public class MoveArm extends CommandBase {
   @Override
   public void initialize() {
     limelightSystem.setPipeline(0);
+    driveSystem.halt();
   }
 
   @Override
@@ -32,9 +33,8 @@ public class MoveArm extends CommandBase {
 
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
     SmartDashboard.putNumber("Auto Time", autoTime);
-
     if (autoTime < 7.0f) {
-      driveSystem.setArm(0.2);
+      driveSystem.setArm(0.4);
     } else if (autoTime > 8.0f) {
       //driveSystem.setClaw(-0.2);
       driveSystem.setArm(0.0);
@@ -48,6 +48,6 @@ public class MoveArm extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return autoTime < 9.0f;
+    return autoTime > 6.0f;
   }
 }
