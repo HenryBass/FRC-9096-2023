@@ -19,7 +19,6 @@ public class DriveBack extends CommandBase {
   float aPow;
   float autoDist = 2.6f;
   double autoTime = 0;
-  int autoState = 0;
   double timestamp = 0;
   
   public DriveBack(DriveBase drivesystem, Limelight limelightsystem) {
@@ -40,7 +39,7 @@ public class DriveBack extends CommandBase {
 
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
     SmartDashboard.putNumber("Auto Time", autoTime);
-    
+
     if (limelightSystem.getDist() < autoDist && limelightSystem.getVisible() > 0.0) {
       driveSystem.drive(0.5, Math.tanh(limelightSystem.getAngle()) / 2);
     } else {

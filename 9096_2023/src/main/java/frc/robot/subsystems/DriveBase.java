@@ -49,6 +49,22 @@ public class DriveBase extends SubsystemBase {
     return arm.getOutputCurrent();
   }
 
+  public double clawCurrentLimit(double speed) {
+    if (getClawCurrent() > 40.0) {
+      return 0.0;
+    } else {
+      return speed;
+    }
+  }
+
+  public double armCurrentLimit(double speed) {
+    if (getArmCurrent() > 40.0) {
+      return 0.0;
+    } else {
+      return speed;
+    }
+  }
+
   public void drive(double speed, double rotation) {
     driveSpeed = speed;
     driveAngle = rotation;

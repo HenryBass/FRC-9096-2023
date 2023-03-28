@@ -1,0 +1,53 @@
+{
+  "Clients": {
+    "open": true
+  },
+  "Connections": {
+    "open": true
+  },
+  "NT3@10.90.96.11:48342": {
+    "open": true
+  },
+  "NT3@10.90.96.148:53596": {
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "9096"
+  },
+  "Persistent Values": {
+    "open": false
+  },
+  "Retained Values": {
+    "open": false
+  },
+  "Server": {
+    "Publishers": {
+      "open": true
+    },
+    "Subscribers": {
+      "open": true
+    },
+    "open": true
+  },
+  "outlineviewer": {
+    "open": true
+  },
+  "transitory": {
+    "LiveWindow": {
+      ".status": {
+        "open": true
+      },
+      "open": true
+    },
+    "Shuffleboard": {
+      ".metadata": {
+        "open": true
+      },
+      ".recording": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}
