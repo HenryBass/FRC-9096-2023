@@ -28,6 +28,8 @@ public class DriveBase extends SubsystemBase {
   double armSpeed = 0.0;
   double clawSpeed = 0.0;
 
+  boolean paused = false;
+
   public DriveBase() {
     left.setInverted(false);
   }
@@ -35,10 +37,17 @@ public class DriveBase extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Claw current", claw.getOutputCurrent());
-    drive.arcadeDrive(driveSpeed, driveAngle);
     
-    arm.set(armSpeed);
-    claw.set(clawSpeed);
+    if (!paused) {
+      arm.set(armSpeed);
+      claw.set(clawSpeed);
+      drive.arcadeDrive(driveAngle, driveSpeed);
+    } else {
+      arm.set(0.0);
+      claw.set(0.0);
+      drive.arcadeDrive(0, 0);
+    }
+
   }
 
   public double getClawCurrent() {
@@ -78,10 +87,18 @@ public class DriveBase extends SubsystemBase {
     clawSpeed = speed;
   }
 
+  public void pause() {
+    paused = true;
+  }
+
+  public void resume() {
+    paused = false;
+  }
+
   public void halt() {
     setClaw(0.0);
     setArm(0.0);
-    drive(0.0, 0.0);
+    drive.arcadeDrive(0, 0);
   }
 
 }

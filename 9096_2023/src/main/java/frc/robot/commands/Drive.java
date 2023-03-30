@@ -26,10 +26,11 @@ public class Drive extends CommandBase {
   public void initialize() {
     limelightSystem.setPipeline(1);
     driveSystem.halt();
+    driveSystem.resume();
   }
 
   double forceCurve(double x) {
-    return Math.pow(x, 2) * (x / Math.abs(x));
+    return x;//Math.pow(x, 2) * (x / Math.abs(x));
   }
 
   @Override
@@ -40,7 +41,7 @@ public class Drive extends CommandBase {
     armPow = (ctrl.getTrigger() ? 0.75f : 0.63f);
     driveSystem.setClaw(driveSystem.clawCurrentLimit(armInput * 0.4));
     driveSystem.setArm(armCtrl.getY() * 0.4);
-    driveSystem.drive(forceCurve(ctrl.getX()) * pow, forceCurve(ctrl.getY()) * pow);
+    driveSystem.drive(forceCurve(ctrl.getY()) * pow, forceCurve(ctrl.getX()) * pow);
 
     if (Math.abs(armInput) > 0.05) {
       SmartDashboard.putString("Claw:", (armInput < 0) ? "Out" : "In");

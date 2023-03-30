@@ -9,6 +9,7 @@ public final class Autos {
   public static CommandBase getAuto(DriveBase drivesubsystem, Limelight limelightsubsystem) {
     return Commands.sequence(
       new MoveArm(drivesubsystem, limelightsubsystem),
+      new OpenClaw(drivesubsystem),
       new DriveBack(drivesubsystem, limelightsubsystem)
     );
   }

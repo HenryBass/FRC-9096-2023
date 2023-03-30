@@ -5,21 +5,30 @@
   "Connections": {
     "open": true
   },
+  "NT3@10.90.96.11:35150": {
+    "Publishers": {
+      "open": true
+    },
+    "Subscribers": {
+      "open": true
+    },
+    "open": true
+  },
   "NT3@10.90.96.11:48342": {
     "open": true
   },
   "NT3@10.90.96.148:53596": {
     "open": true
   },
+  "NT3@10.90.96.148:64128": {
+    "Subscribers": {
+      "open": true
+    },
+    "open": true
+  },
   "NetworkTables Settings": {
     "mode": "Client (NT4)",
     "serverTeam": "9096"
-  },
-  "Persistent Values": {
-    "open": false
-  },
-  "Retained Values": {
-    "open": false
   },
   "Server": {
     "Publishers": {
@@ -33,7 +42,21 @@
   "outlineviewer": {
     "open": true
   },
+  "retained": {
+    "Contours": {
+      "open": true
+    },
+    "GRIP": {
+      "Contours": {
+        "open": true
+      },
+      "open": true
+    }
+  },
   "transitory": {
+    "FMSInfo": {
+      "open": true
+    },
     "LiveWindow": {
       ".status": {
         "open": true

@@ -33,11 +33,7 @@ public class MoveArm extends CommandBase {
 
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
     SmartDashboard.putNumber("Auto Time", autoTime);
-    if (autoTime < 7.0f) {
-      driveSystem.setArm(0.4);
-    } else if (autoTime > 5.0f) {
-      driveSystem.setClaw(-0.2);
-    }
+    driveSystem.setArm((autoTime > 5.0) ? 0.1 : 0.4);
   }
 
   @Override
@@ -47,6 +43,6 @@ public class MoveArm extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return autoTime > 6.0f;
+    return autoTime > 6.5f;
   }
 }

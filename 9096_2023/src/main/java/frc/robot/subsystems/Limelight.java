@@ -10,7 +10,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class Limelight extends SubsystemBase {
 
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTable grip = NetworkTableInstance.getDefault().getTable("GRIP/Contours");
+  NetworkTable grip = NetworkTableInstance.getDefault().getTable("Contours");
 
   NetworkTableEntry tx = table.getEntry("tx");
   NetworkTableEntry ty = table.getEntry("ty");
@@ -18,9 +18,8 @@ public class Limelight extends SubsystemBase {
   NetworkTableEntry tv = table.getEntry("tv");
   NetworkTableEntry pipeline = table.getEntry("pipeline");
   NetworkTableEntry botpose = table.getEntry("targetpose_cameraspace");
-  NetworkTableEntry cx = grip.getEntry("CenterX");
+  NetworkTableEntry gripEntry = grip.getEntry("centerX");
   double v = tv.getNumber(0).doubleValue();
-  double[] pose = botpose.getDoubleArray(new double[6]);
 
   public Limelight() {
   }
@@ -34,14 +33,17 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getPose(int index) {
+    double[] pose = botpose.getDoubleArray(new double[6]);
     return pose[index];
   }
 
   public double getAngle() {
+    double[] pose = botpose.getDoubleArray(new double[6]);
     return pose[4];
   }
 
   public double getDist() {
+    double[] pose = botpose.getDoubleArray(new double[6]);
     return pose[2];
   }
 
@@ -50,7 +52,12 @@ public class Limelight extends SubsystemBase {
   }
 
   public double getXOffset() {
-    return tx.getDouble(0.0);
+    double[] res = gripEntry.getDoubleArray(new double[] {});
+    if (res.length > 0) {
+      return res[0];
+    } else {
+      return 0.0;
+    }
   }
 
   public double getEntry(String entry) {
@@ -59,9 +66,9 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Apriltag distance", pose[2]);
-    SmartDashboard.putNumber("Apriltag angle", pose[4]);
-    SmartDashboard.putNumber("GRIP", cx.getDouble(0.0));
+    SmartDashboard.putNumber("Apriltag distance", getPose(2));
+    SmartDashboard.putNumber("Apriltag angle", getPose(4));
+    SmartDashboard.putNumber("GRIP", getXOffset());
     SmartDashboard.putNumber("Visible", getVisible());
   }
 

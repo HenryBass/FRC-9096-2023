@@ -26,7 +26,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    engageCubeLock.toggleOnTrue(new LockCube(driveSubsystem, limelightSubsystem));
+    engageCubeLock.whileTrue(new LockCube(driveSubsystem, limelightSubsystem));
   }
 
 }
