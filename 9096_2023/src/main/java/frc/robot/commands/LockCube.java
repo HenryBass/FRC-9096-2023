@@ -30,7 +30,7 @@ public class LockCube extends CommandBase {
     //System.out.println(SmartDashboard.getNumber("Kp", 4));
     //pid.setPID(SmartDashboard.getNumber("Kp", 0), SmartDashboard.getNumber("Ki", 0), SmartDashboard.getNumber("Kd", 0));
     offset = limelightSystem.getXOffset();
-    driveSystem.drive(0, Math.tanh(offset - 640) * 0.4);
+    driveSystem.drive(0, Math.tanh(offset - 320) * 0.4);
     //driveSystem.drive(0, pid.calculate(offset, 620));
   }
 

@@ -39,7 +39,7 @@ public class DriveBase extends SubsystemBase {
     SmartDashboard.putNumber("Claw current", claw.getOutputCurrent());
     
     if (!paused) {
-      arm.set(armSpeed);
+      arm.set(armSpeed / 2);
       claw.set(clawSpeed);
       drive.arcadeDrive(driveAngle, driveSpeed);
     } else {
